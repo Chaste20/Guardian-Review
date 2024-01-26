@@ -15,15 +15,15 @@
     <br>
 
   
-<div class="container mt-5">
+<!--<div class="container mt-5">
   
 
     <div class="input-group">
         <input type="text" class="form-control d-inline" aria-describedby="basic-addon5" value=""
             placeholder="ex: amazon.in/chaste" id="link"
             style="max-width: 700px; margin-right: 50px; margin-left: 30px; border-radius: 15px;">
-        <button onclick="send()" type="button" class="btn btn-primary d-inline">Submit</button>
-    </div>
+        <button onclick="('app.py')" type="button" class="btn btn-primary d-inline">Submit</button>
+    </div> -->
   <!--<form action="/app.py">
     
 
@@ -34,12 +34,20 @@
     
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>-->
-</div>
+<!--</div>-->
+<form name ='form'  method="post" action="{{ url_for('ml_process') }}"> <!-- Replace with the correct URL where your Flask app is running -->
+    <div class="input-group">
+        <input type="text" class="form-control d-inline" aria-describedby="basic-addon5" value=""
+            placeholder="ex: amazon.in/chaste" name="url" id="url"
+            style="max-width: 700px; margin-right: 50px; margin-left: 30px; border-radius: 15px;">
+        <button type="submit" class="btn btn-primary d-inline">Submit</button>
+    </div>
+</form>
 
 
 </body>
 
-<script>
+<!--<script>
     document.getElementById("geturlbtn").addEventListener("click", () => {
         // alert('clicked')
         var tablink;
@@ -50,7 +58,7 @@
 
 
     })
-</script>
+</script>/
 
 <script>
     function send() {
@@ -74,7 +82,7 @@
         });
 
     }
-</script>
+</script>-->
 
 
 </html>
