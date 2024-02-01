@@ -1,14 +1,18 @@
-from flask import Flask, render_template, request, url_for
+from flask import Flask, render_template, request, url_for,jsonify
 import requests
 import pandas as pd
 from bs4 import BeautifulSoup
 from datetime import datetime
 from amazons import process_product_url
 from mls import predict_reviews
+from flask_cors import CORS
 
 
 app = Flask(__name__)
 
+CORS(app, resources={r"/ml_process": {"origins": "chrome-extension://kbhlmcneelkjopmohhppfaafgoiiaaco"}})
+#CORS(app, resources={r"/ml_process": {"origins": "chrome-extension://kbhlmcneelkjopmohhppfaafgoiiaaco"}})
+# id : kbhlmcneelkjopmohhppfaafgoiiaaco
 @app.route('/')
 def main():
     return render_template('index.html')
@@ -34,9 +38,25 @@ def ml_process():
         
     prediction_result = predict_reviews(df_reviews)
 
-    #result = process_product_url(product_url)
+   
    # return f"Quantity of real review from : {ml_link}. Prediction: {prediction_result}"
-    return f"Quantity of real review.{prediction_result}"
+    
+    #return  render_template("result.html", reviews=df_reviews, preds=prediction_result)
+    response_data = {
+        'reviews': df_reviews.to_dict(orient='records'),
+        'predictions': prediction_result
+    }
+
+    # Check the 'Accept' header to determine the response format
+    accept_header = request.headers.get('Accept')
+    
+    if 'application/json' in accept_header:
+        # If the request prefers JSON, return JSON
+        return jsonify(response_data), 200, {'Content-Type': 'application/json'}
+    else:
+        # If the request prefers HTML, return the HTML template
+        return render_template("result.html", reviews=df_reviews, preds=prediction_result)
+    #return render_template('result.html')
 
         
         # Process the URL as needed (e.g., store it in a database, perform some action)
@@ -51,4 +71,4 @@ def ml_process():
 #return render_template('index.html')
 if __name__ == '__main__':
     #webbrowser.open('http://127.0.0.1:5000')
-    app.run(debug=False)
+    app.run(debug=True)
